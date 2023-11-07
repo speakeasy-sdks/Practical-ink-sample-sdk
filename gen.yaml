@@ -1,14 +1,32 @@
 configVersion: 1.0.0
+management:
+  docChecksum: 1281ac48158b8bedeaaf9a77bf505600
+  docVersion: 3.4.0
+  speakeasyVersion: 1.114.1
+  generationVersion: 2.181.1
 generation:
-  comments:
-    disableComments: false
-    omitDescriptionIfSummaryPresent: false
-  baseServerURL: ""
+  comments: {}
   sdkClassName: TechPort
-  singleTagPerOp: false
-  tagNamespacingDisabled: false
+  repoURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk.git
+features:
+  go:
+    constsAndDefaults: 0.1.1
+    core: 3.1.0
+    globalServerURLs: 2.82.0
 go:
-  version: 0.0.1
+  version: 0.1.0
   clientServerStatusCodesAsErrors: true
+  flattenGlobalSecurity: true
+  imports:
+    option: openapi
+    paths:
+      callbacks: models/callbacks
+      errors: models/sdkerrors
+      operations: models/operations
+      shared: models/components
+      webhooks: models/webhooks
+  installationURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk
   maxMethodParams: 0
   packageName: github.com/speakeasy-sdks/Practical-ink-sample-sdk
+  published: true
+  repoSubDirectory: .
