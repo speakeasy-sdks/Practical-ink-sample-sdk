@@ -37,11 +37,11 @@ docs/models/operations/getapiprojectsformatrequest.md
 docs/models/operations/getapiprojectsformatresponseresponsebody.md
 docs/models/operations/getapiprojectsformatresponsebody.md
 docs/models/operations/getapiprojectsformatresponse.md
-docs/models/shared/project.md
-docs/models/shared/organization.md
-docs/models/shared/technologyarea.md
-docs/models/shared/libraryitem.md
-docs/models/shared/file.md
+docs/models/components/project.md
+docs/models/components/organization.md
+docs/models/components/technologyarea.md
+docs/models/components/libraryitem.md
+docs/models/components/file.md
 docs/sdks/techport/README.md
 models/operations/options.go
 .gitattributes

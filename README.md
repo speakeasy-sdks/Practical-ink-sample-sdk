@@ -15,7 +15,7 @@ It has been generated successfully based on your OpenAPI spec. However, it is no
 - [ ] 🎁 Publish your SDK to package managers by [configuring automatic publishing](https://www.speakeasyapi.dev/docs/productionize-sdks/publish-sdks)
 - [ ] ✨ When ready to productionize, delete this section from the README
 <!-- Start SDK Installation -->
-# SDK Installation
+## SDK Installation
 
 ```bash
 go get github.com/speakeasy-sdks/Practical-ink-sample-sdk
@@ -24,8 +24,6 @@ go get github.com/speakeasy-sdks/Practical-ink-sample-sdk
 
 ## SDK Example Usage
 <!-- Start SDK Example Usage -->
-
-
 ```go
 package main
 
@@ -53,9 +51,9 @@ func main() {
 <!-- End SDK Example Usage -->
 
 <!-- Start SDK Available Operations -->
-# Available Resources and Operations
+## Available Resources and Operations
 
-## [TechPort SDK](docs/sdks/techport/README.md)
+### [TechPort SDK](docs/sdks/techport/README.md)
 
 * [GetAPI](docs/sdks/techport/README.md#getapi) - Returns the swagger specification for the API.
 * [GetAPIProjectsIDFormat](docs/sdks/techport/README.md#getapiprojectsidformat) - Returns information about a specific technology project.
@@ -64,16 +62,45 @@ func main() {
 
 <!-- Start Dev Containers -->
 
-
-
 <!-- End Dev Containers -->
 
 <!-- Start Error Handling -->
 # Error Handling
 
-Handling errors in your SDK should largely match your expectations.  All operations return a response object or an error, they will never return both.  When specified by the OpenAPI spec document, the SDK will return the appropriate subclass.
+Handling errors in this SDK should largely match your expectations.  All operations return a response object or an error, they will never return both.  When specified by the OpenAPI spec document, the SDK will return the appropriate subclass.
+
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| sdkerrors.SDKError | 400-600            | */*                |
 
 
+## Example
+
+```go
+package main
+
+import (
+	"context"
+	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
+	"log"
+)
+
+func main() {
+	s := practicalinksamplesdk.New()
+
+	ctx := context.Background()
+	res, err := s.GetAPI(ctx)
+	if err != nil {
+
+		var e *sdkerrors.SDKError
+		if errors.As(err, &e) {
+			// handle error
+			log.Fatal(e.Error())
+		}
+	}
+}
+
+```
 <!-- End Error Handling -->
 
 <!-- Start Server Selection -->
