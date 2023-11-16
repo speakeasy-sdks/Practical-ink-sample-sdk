@@ -21,9 +21,10 @@ Returns the swagger specification for the API.
 package main
 
 import(
+	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
 	"context"
 	"log"
-	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
+	"net/http"
 )
 
 func main() {
@@ -65,10 +66,10 @@ Returns information about a specific technology project.
 package main
 
 import(
-	"context"
-	"log"
 	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
+	"context"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/models/operations"
+	"log"
 )
 
 func main() {
@@ -115,11 +116,11 @@ Returns a list of available technology project IDs.
 package main
 
 import(
-	"context"
-	"log"
 	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
+	"context"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/models/operations"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/types"
+	"log"
 )
 
 func main() {

@@ -2,19 +2,21 @@ configVersion: 1.0.0
 management:
   docChecksum: 1281ac48158b8bedeaaf9a77bf505600
   docVersion: 3.4.0
-  speakeasyVersion: 1.116.0
-  generationVersion: 2.185.0
+  speakeasyVersion: 1.120.3
+  generationVersion: 2.192.1
 generation:
   comments: {}
   sdkClassName: TechPort
   repoURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk.git
+  usageSnippets:
+    optionalPropertyRendering: withExample
 features:
   go:
     constsAndDefaults: 0.1.1
-    core: 3.1.2
+    core: 3.1.5
     globalServerURLs: 2.82.0
 go:
-  version: 0.1.1
+  version: 0.1.2
   clientServerStatusCodesAsErrors: true
   flattenGlobalSecurity: true
   imports:
