@@ -26,7 +26,6 @@ internal/utils/utils.go
 /models/components/technologyarea.go
 /models/components/libraryitem.go
 /models/components/file.go
-USAGE.md
 docs/models/operations/getapiresponse.md
 docs/models/operations/format.md
 docs/models/operations/getapiprojectsidformatrequest.md
@@ -43,5 +42,6 @@ docs/models/components/technologyarea.md
 docs/models/components/libraryitem.md
 docs/models/components/file.md
 docs/sdks/techport/README.md
+USAGE.md
 models/operations/options.go
 .gitattributes
