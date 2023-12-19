@@ -54,7 +54,7 @@ func main() {
 **[*operations.GetAPIResponse](../../models/operations/getapiresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
 
 ## GetAPIProjectsIDFormat
 
@@ -104,7 +104,7 @@ func main() {
 **[*operations.GetAPIProjectsIDFormatResponse](../../models/operations/getapiprojectsidformatresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
 
 ## GetAPIProjectsFormat
 
@@ -155,4 +155,4 @@ func main() {
 **[*operations.GetAPIProjectsFormatResponse](../../models/operations/getapiprojectsformatresponse.md), error**
 | Error Object       | Status Code        | Content Type       |
 | ------------------ | ------------------ | ------------------ |
-| sdkerrors.SDKError | 400-600            | */*                |
+| sdkerrors.SDKError | 4xx-5xx            | */*                |
