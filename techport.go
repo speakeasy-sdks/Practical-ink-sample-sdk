@@ -123,8 +123,8 @@ func New(opts ...SDKOption) *TechPort {
 			Language:          "go",
 			OpenAPIDocVersion: "3.4.0",
 			SDKVersion:        "0.2.0",
-			GenVersion:        "2.220.0",
-			UserAgent:         "speakeasy-sdk/go 0.2.0 2.220.0 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
+			GenVersion:        "2.225.2",
+			UserAgent:         "speakeasy-sdk/go 0.2.0 2.225.2 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
 		},
 	}
 	for _, opt := range opts {

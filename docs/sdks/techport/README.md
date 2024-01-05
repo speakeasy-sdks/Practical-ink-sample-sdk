@@ -130,7 +130,7 @@ func main() {
     res, err := s.GetAPIProjectsFormat(ctx, operations.GetAPIProjectsFormatRequest{
         DotFormat: "string",
         Format: operations.QueryParamFormatXML,
-        UpdatedSince: types.MustDateFromString("2021-05-09"),
+        UpdatedSince: types.MustDateFromString("2022-05-09"),
     })
     if err != nil {
         log.Fatal(err)

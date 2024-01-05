@@ -1,0 +1,66 @@
+lockVersion: 2.0.0
+id: bf96adbc-4ab6-42a5-9ce3-597819ef616b
+management:
+  docChecksum: 1281ac48158b8bedeaaf9a77bf505600
+  docVersion: 3.4.0
+  speakeasyVersion: internal
+  generationVersion: 2.225.2
+  releaseVersion: 0.2.0
+  configChecksum: 7d0bb6d1c13e5c39783d3537d424dba9
+  repoURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk.git
+  repoSubDirectory: .
+  installationURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk
+  published: true
+features:
+  go:
+    constsAndDefaults: 0.1.2
+    core: 3.3.0
+    globalServerURLs: 2.82.1
+generatedFiles:
+  - techport.go
+  - go.mod
+  - go.sum
+  - tests/helpers.go
+  - models/sdkerrors/sdkerror.go
+  - types/bigint.go
+  - types/date.go
+  - types/datetime.go
+  - types/decimal.go
+  - types/pointers.go
+  - internal/utils/contenttype.go
+  - internal/utils/form.go
+  - internal/utils/headers.go
+  - internal/utils/json.go
+  - internal/utils/pathparams.go
+  - internal/utils/queryparams.go
+  - internal/utils/requestbody.go
+  - internal/utils/retries.go
+  - internal/utils/security.go
+  - internal/utils/utils.go
+  - /models/operations/getapi.go
+  - /models/operations/getapiprojectsidformat.go
+  - /models/operations/getapiprojectsformat.go
+  - /models/components/project.go
+  - /models/components/organization.go
+  - /models/components/technologyarea.go
+  - /models/components/libraryitem.go
+  - /models/components/file.go
+  - docs/models/operations/getapiresponse.md
+  - docs/models/operations/format.md
+  - docs/models/operations/getapiprojectsidformatrequest.md
+  - docs/models/operations/getapiprojectsidformatresponse.md
+  - docs/models/operations/queryparamformat.md
+  - docs/types/date.md
+  - docs/models/operations/getapiprojectsformatrequest.md
+  - docs/models/operations/getapiprojectsformatresponseresponsebody.md
+  - docs/models/operations/getapiprojectsformatresponsebody.md
+  - docs/models/operations/getapiprojectsformatresponse.md
+  - docs/models/components/project.md
+  - docs/models/components/organization.md
+  - docs/models/components/technologyarea.md
+  - docs/models/components/libraryitem.md
+  - docs/models/components/file.md
+  - docs/sdks/techport/README.md
+  - USAGE.md
+  - models/operations/options.go
+  - .gitattributes
