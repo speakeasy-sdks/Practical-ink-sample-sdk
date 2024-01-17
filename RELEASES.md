@@ -69,3 +69,13 @@ Based on:
 - [go v0.2.0] .
 ### Releases
 - [Go v0.2.0] https://github.com/speakeasy-sdks/Practical-ink-sample-sdk/releases/tag/v0.2.0 - .
+
+## 2024-01-17 01:22:48
+### Changes
+Based on:
+- OpenAPI Doc 3.4.0 
+- Speakeasy CLI 1.142.1 (2.234.3) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [go v0.2.1] .
+### Releases
+- [Go v0.2.1] https://github.com/speakeasy-sdks/Practical-ink-sample-sdk/releases/tag/v0.2.1 - .
