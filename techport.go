@@ -6,13 +6,14 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/internal/hooks"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/internal/utils"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/models/components"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/models/operations"
 	"github.com/speakeasy-sdks/Practical-ink-sample-sdk/models/sdkerrors"
 	"io"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 )
 
@@ -57,6 +58,7 @@ type sdkConfiguration struct {
 	GenVersion        string
 	UserAgent         string
 	RetryConfig       *utils.RetryConfig
+	Hooks             *hooks.Hooks
 }
 
 func (c *sdkConfiguration) GetServerDetails() (string, map[string]string) {
@@ -122,14 +124,17 @@ func New(opts ...SDKOption) *TechPort {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "3.4.0",
-			SDKVersion:        "0.3.0",
-			GenVersion:        "2.250.2",
-			UserAgent:         "speakeasy-sdk/go 0.3.0 2.250.2 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
+			SDKVersion:        "0.4.0",
+			GenVersion:        "2.258.2",
+			UserAgent:         "speakeasy-sdk/go 0.4.0 2.258.2 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
+			Hooks:             hooks.New(),
 		},
 	}
 	for _, opt := range opts {
 		opt(sdk)
 	}
+
+	sdk.sdkConfiguration.DefaultClient = sdk.sdkConfiguration.Hooks.ClientInit(sdk.sdkConfiguration.DefaultClient)
 
 	// Use WithClient to override the default client if you would like to customize the timeout
 	if sdk.sdkConfiguration.DefaultClient == nil {
@@ -144,24 +149,48 @@ func New(opts ...SDKOption) *TechPort {
 
 // GetAPI - Returns the swagger specification for the API.
 func (s *TechPort) GetAPI(ctx context.Context) (*operations.GetAPIResponse, error) {
-	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url := strings.TrimSuffix(baseURL, "/") + "/api"
+	hookCtx := hooks.HookContext{OperationID: "get_/api"}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	opURL, err := url.JoinPath(baseURL, "/api")
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "*/*")
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -178,6 +207,7 @@ func (s *TechPort) GetAPI(ctx context.Context) (*operations.GetAPIResponse, erro
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode >= 400 && httpRes.StatusCode < 500:
 		fallthrough
@@ -193,6 +223,8 @@ func (s *TechPort) GetAPI(ctx context.Context) (*operations.GetAPIResponse, erro
 
 // GetAPIProjectsIDFormat - Returns information about a specific technology project.
 func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operations.GetAPIProjectsIDFormatRequest, opts ...operations.Option) (*operations.GetAPIProjectsIDFormatResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "get_/api/projects/{id}{.format}"}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionAcceptHeaderOverride,
@@ -204,12 +236,12 @@ func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operation
 		}
 	}
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url, err := utils.GenerateURL(ctx, baseURL, "/api/projects/{id}{.format}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/projects/{id}{.format}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -219,7 +251,7 @@ func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operation
 		req.Header.Set("Accept", "application/json;q=1, application/xml;q=0")
 	}
 
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
@@ -227,12 +259,31 @@ func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operation
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -249,6 +300,7 @@ func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operation
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
@@ -276,6 +328,8 @@ func (s *TechPort) GetAPIProjectsIDFormat(ctx context.Context, request operation
 
 // GetAPIProjectsFormat - Returns a list of available technology project IDs.
 func (s *TechPort) GetAPIProjectsFormat(ctx context.Context, request operations.GetAPIProjectsFormatRequest, opts ...operations.Option) (*operations.GetAPIProjectsFormatResponse, error) {
+	hookCtx := hooks.HookContext{OperationID: "get_/api/projects{.format}"}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionAcceptHeaderOverride,
@@ -287,12 +341,12 @@ func (s *TechPort) GetAPIProjectsFormat(ctx context.Context, request operations.
 		}
 	}
 	baseURL := utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	url, err := utils.GenerateURL(ctx, baseURL, "/api/projects{.format}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/projects{.format}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
@@ -302,7 +356,7 @@ func (s *TechPort) GetAPIProjectsFormat(ctx context.Context, request operations.
 		req.Header.Set("Accept", "application/json;q=1, application/xml;q=0")
 	}
 
-	req.Header.Set("user-agent", s.sdkConfiguration.UserAgent)
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
@@ -310,12 +364,31 @@ func (s *TechPort) GetAPIProjectsFormat(ctx context.Context, request operations.
 
 	client := s.sdkConfiguration.DefaultClient
 
-	httpRes, err := client.Do(req)
+	req, err = s.sdkConfiguration.Hooks.BeforeRequest(hooks.BeforeRequestContext{hookCtx}, req)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request: %w", err)
+		return nil, err
 	}
-	if httpRes == nil {
-		return nil, fmt.Errorf("error sending request: no response")
+
+	httpRes, err := client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterError(hooks.AfterErrorContext{hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		httpRes, err = s.sdkConfiguration.Hooks.AfterSuccess(hooks.AfterSuccessContext{hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	contentType := httpRes.Header.Get("Content-Type")
@@ -332,6 +405,7 @@ func (s *TechPort) GetAPIProjectsFormat(ctx context.Context, request operations.
 	}
 	httpRes.Body.Close()
 	httpRes.Body = io.NopCloser(bytes.NewBuffer(rawBody))
+
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {

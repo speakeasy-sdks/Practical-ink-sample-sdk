@@ -77,7 +77,7 @@ func main() {
 
     ctx := context.Background()
     res, err := s.GetAPIProjectsIDFormat(ctx, operations.GetAPIProjectsIDFormatRequest{
-        DotFormat: "string",
+        DotFormat: "<value>",
         Format: operations.FormatJSON,
         ID: 355611,
     })
@@ -128,7 +128,7 @@ func main() {
 
     ctx := context.Background()
     res, err := s.GetAPIProjectsFormat(ctx, operations.GetAPIProjectsFormatRequest{
-        DotFormat: "string",
+        DotFormat: "<value>",
         Format: operations.QueryParamFormatXML,
         UpdatedSince: types.MustDateFromString("2022-05-09"),
     })
