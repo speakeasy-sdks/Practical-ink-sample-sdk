@@ -124,9 +124,9 @@ func New(opts ...SDKOption) *TechPort {
 		sdkConfiguration: sdkConfiguration{
 			Language:          "go",
 			OpenAPIDocVersion: "3.4.0",
-			SDKVersion:        "0.4.2",
-			GenVersion:        "2.272.4",
-			UserAgent:         "speakeasy-sdk/go 0.4.2 2.272.4 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
+			SDKVersion:        "0.4.3",
+			GenVersion:        "2.277.0",
+			UserAgent:         "speakeasy-sdk/go 0.4.3 2.277.0 3.4.0 github.com/speakeasy-sdks/Practical-ink-sample-sdk",
 			Hooks:             hooks.New(),
 		},
 	}
