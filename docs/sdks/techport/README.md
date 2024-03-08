@@ -24,7 +24,6 @@ import(
 	practicalinksamplesdk "github.com/speakeasy-sdks/Practical-ink-sample-sdk"
 	"context"
 	"log"
-	"net/http"
 )
 
 func main() {
@@ -35,8 +34,7 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-
-    if res.StatusCode == http.StatusOK {
+    if res != nil {
         // handle response
     }
 }
@@ -84,7 +82,6 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-
     if res.Project != nil {
         // handle response
     }
@@ -135,7 +132,6 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-
     if res.TwoHundredApplicationJSONObject != nil {
         // handle response
     }
