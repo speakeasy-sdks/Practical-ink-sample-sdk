@@ -3,10 +3,10 @@ id: bf96adbc-4ab6-42a5-9ce3-597819ef616b
 management:
   docChecksum: 1281ac48158b8bedeaaf9a77bf505600
   docVersion: 3.4.0
-  speakeasyVersion: 1.204.1
-  generationVersion: 2.279.1
-  releaseVersion: 0.5.0
-  configChecksum: 44bba96581dec014481a0c8643952d75
+  speakeasyVersion: 1.207.1
+  generationVersion: 2.280.6
+  releaseVersion: 0.5.1
+  configChecksum: 0fd08c2105925bb9298a11253f24601e
   repoURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/Practical-ink-sample-sdk
@@ -15,7 +15,7 @@ features:
   go:
     constsAndDefaults: 0.1.4
     core: 3.4.4
-    globalServerURLs: 2.82.1
+    globalServerURLs: 2.82.2
     responseFormat: 0.1.0
 generatedFiles:
   - techport.go
